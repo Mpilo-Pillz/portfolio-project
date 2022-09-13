@@ -1,11 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Users from "./users/pages/Users";
 
-function App() {
-  const [count, setCount] = useState(0);
-
-  return <h1>Mpii</h1>;
-}
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Users />} />
+    </Routes>
+  );
+};
 
 export default App;
