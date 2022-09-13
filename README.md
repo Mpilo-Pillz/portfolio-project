@@ -2,6 +2,10 @@
 
 Portfolio project showcasing TypeScript, React, Swift, iOS, Mongo and Express
 
+# Web UI
+
+Port http://127.0.0.1:5173/
+
 ## What did I do differently form the course project
 
 - I am using TypeScript for the React Portion instead of JavaScript
