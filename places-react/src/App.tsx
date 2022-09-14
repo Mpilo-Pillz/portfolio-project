@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import NewPlace from "./places/pages/NewOlace";
+import NewPlace from "./places/pages/NewPlace";
 import Users from "./users/pages/Users";
 
 const App = () => {
