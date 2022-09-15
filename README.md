@@ -13,6 +13,11 @@ Port http://127.0.0.1:5173/
 - I used Vite React instead of Create-React-App
 - I used React v18 instead of 17
 
+## React Practices Displayed
+
+- Use of Stateful and Presentational components
+- Keeping Components Small and Focused on One Responsibility
+
 ## Sources
 
 - https://www.udemy.com/course/react-nodejs-express-mongodb-the-mern-fullstack-guide/learn/lecture/16845448#overview
