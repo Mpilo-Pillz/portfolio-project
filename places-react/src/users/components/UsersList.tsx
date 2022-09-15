@@ -15,7 +15,7 @@ const UsersList: React.FC<UsersListProps> = ({ items }) => {
     );
   }
   return (
-    <ul>
+    <ul className="users-list">
       {items.map((user) => (
         <UserItem
           key={user.id}
