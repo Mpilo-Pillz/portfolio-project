@@ -17,6 +17,9 @@ Port http://127.0.0.1:5173/
 
 - Use of Stateful and Presentational components
 - Keeping Components Small and Focused on One Responsibility
+- Opted to destructure props
+- Use the empty fragment for a more modernised react
+- for the aside decided to use React Portals to have it rendered as not a child of the root div
 
 ## Sources
 
