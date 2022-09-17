@@ -18,7 +18,7 @@ interface ModalOverlayProps {
 
   // TODO - revise this type
   show?: boolean;
-  onCancel?: () => void;
+  onCancel: () => void;
 }
 
 interface ModalProps {
