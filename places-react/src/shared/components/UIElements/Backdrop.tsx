@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import "./Backdrop.css";
 
 interface BackdropProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 const Backdrop: React.FC<BackdropProps> = ({ onClick }) => {
   return ReactDOM.createPortal(
