@@ -1,11 +1,11 @@
 import React from "react";
 import { googleMapsLocations } from "../../models/Place";
+import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 
 import "./PlaceItem.css";
 
 interface PlaceItemProps {
-  key: string;
   id: string;
   image: string;
   title: string;
@@ -15,7 +15,6 @@ interface PlaceItemProps {
   coordinates: googleMapsLocations;
 }
 const PlaceItem: React.FC<PlaceItemProps> = ({
-  key,
   id,
   image,
   title,
@@ -36,9 +35,9 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
           <p>{description}</p>
         </div>
         <div className="place-item__actions">
-          <button>VIEW ON MAP</button>
-          <button>EDIT</button>
-          <button>DELETE</button>
+          <Button inverse>VIEW ON MAP</Button>
+          <Button to={`/places/${id}`}>EDIT</Button>
+          <Button danger>DELETE</Button>
         </div>
       </li>
     </Card>
