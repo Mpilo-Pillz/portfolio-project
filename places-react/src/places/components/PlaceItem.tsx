@@ -3,6 +3,7 @@ import { googleMapsLocations } from "../../models/Place";
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 import Modal from "../../shared/components/UIElements/Modal";
+import Map from "../../shared/components/UIElements/Map";
 
 import "./PlaceItem.css";
 
@@ -41,7 +42,7 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
         }
       >
         <div className="map-container">
-          <h2>THE MAP!</h2>
+          <Map center={coordinates} zoom={16} />
         </div>
       </Modal>
       <Card className="place-item__content">
