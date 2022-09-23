@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { validate } from "../../util/validators";
 
 import "./Input.css";
@@ -6,13 +6,14 @@ import "./Input.css";
 type InputValidator = { type: string };
 interface InputProps {
   id: string;
-  type: string;
+  type?: string;
   placeholder?: string;
   label: string;
   rows?: number;
   element: string;
   errorText: string;
   validators: InputValidator[];
+  onInput: (id: string, inputStateVaue: string, isValid: boolean) => any;
 }
 
 // does not depend on component inputs
@@ -42,6 +43,7 @@ const Input: React.FC<InputProps> = ({
   rows,
   errorText,
   validators,
+  onInput,
   ...props
 }) => {
   // arg1 is the function t act on the state
@@ -52,6 +54,12 @@ const Input: React.FC<InputProps> = ({
     isTouched: false,
     isValid: false,
   });
+
+  const { value, isValid } = inputState;
+
+  useEffect(() => {
+    onInput(id, value, isValid);
+  }, [id, value, isValid, onInput]);
   const changeHandler = (event: any) => {
     dispatch({ type: "CHANGE", val: event.target.value, validators });
   };
@@ -66,7 +74,7 @@ const Input: React.FC<InputProps> = ({
     props.element === "input" ? (
       <input
         id={id}
-        type={type}
+        type={type ?? ""}
         placeholder={placeholder}
         onChange={changeHandler}
         onBlur={touchHandler}
