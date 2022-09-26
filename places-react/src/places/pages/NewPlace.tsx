@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useReducer } from "react";
 import Input from "../../shared/components/FormElements/Input";
 import {
   VALIDATOR_MINLENGTH,
@@ -7,7 +7,26 @@ import {
 
 import "./NewPlace.css";
 
+const formReducer = (state, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
 const NewPlace = () => {
+  useReducer(formReducer, {
+    inputs: {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+    },
+    isValid: false,
+  });
   const titleInputHandler = useCallback(
     (id: string, value: string, isValid: boolean) => {},
     []
