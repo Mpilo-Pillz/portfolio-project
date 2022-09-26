@@ -11,11 +11,13 @@ import "./NewPlace.css";
 export type FormActionType = "INPUT_CHANGE";
 
 export interface FormState {
-  inputs: {
-    inputId: {
-      value: string;
-      isValid: boolean;
-    };
+  title: {
+    value: string;
+    isValid: boolean;
+  };
+  description: {
+    value: string;
+    isValid: boolean;
   };
 }
 
@@ -27,6 +29,7 @@ export interface formActionState {
 }
 
 const formReducer = (state: any, action: formActionState) => {
+  // console.log("STATE-->", state);
   switch (action.type) {
     case "INPUT_CHANGE":
       let formIsValid = true;
@@ -71,8 +74,13 @@ const NewPlace = () => {
     []
   );
 
+  const placeSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(formState.inputs); // TODO: send to backend
+  };
+
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={placeSubmitHandler}>
       <Input
         id="title"
         type="text"
@@ -89,6 +97,15 @@ const NewPlace = () => {
         element="textarea"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (at least 5 characters) "
+        onInput={inputHandler}
+      />
+      <Input
+        id="address"
+        type="input"
+        label="Address"
+        element="input"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter a valid address"
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>
