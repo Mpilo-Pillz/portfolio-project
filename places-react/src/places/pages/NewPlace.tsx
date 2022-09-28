@@ -6,7 +6,7 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 
-import "./NewPlace.css";
+import "./PlaceForm.css";
 
 export type FormActionType = "INPUT_CHANGE";
 

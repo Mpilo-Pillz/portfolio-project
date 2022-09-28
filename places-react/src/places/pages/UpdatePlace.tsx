@@ -8,6 +8,8 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 
+import "./PlaceForm.css";
+
 const UpdatePlace = () => {
   const placeId = useParams().placeId;
 
@@ -21,7 +23,7 @@ const UpdatePlace = () => {
     );
   }
   return (
-    <form>
+    <form className="place-form">
       <Input
         id="title"
         element="input"
