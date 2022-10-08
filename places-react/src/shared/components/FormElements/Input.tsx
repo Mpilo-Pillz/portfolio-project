@@ -13,8 +13,8 @@ interface InputProps {
   element: string;
   errorText: string;
   validators: InputValidator[];
-  value?: string;
-  valid?: boolean;
+  initialValue?: string;
+  initialValidity?: boolean;
   onInput: (id: string, inputStateVaue: string, isValid: boolean) => any;
 }
 
@@ -52,9 +52,9 @@ const Input: React.FC<InputProps> = ({
   // arg2 is the initial state
   // receives current state and updates it based on action received and retruns new state
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: props.value || "",
+    value: props.initialValue || "",
     isTouched: false,
-    isValid: props.valid || false,
+    isValid: props.initialValidity || false,
   });
 
   const { value, isValid } = inputState;
