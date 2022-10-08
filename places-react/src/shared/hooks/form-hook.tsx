@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { formActionState } from "../../places/pages/NewPlace";
+import { UserInput } from "../Types/UserInput";
 
 const formReducer = (state: any, action: formActionState) => {
   // console.log("STATE-->", state);
@@ -26,7 +27,10 @@ const formReducer = (state: any, action: formActionState) => {
   }
 };
 
-export const useForm = (initialInputs: any, initialFormValidity: boolean) => {
+export const useForm = (
+  initialInputs: { title: UserInput; description: UserInput },
+  initialFormValidity: boolean
+) => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,
     isValid: initialFormValidity,
