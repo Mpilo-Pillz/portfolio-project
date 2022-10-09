@@ -25,6 +25,15 @@ Port http://127.0.0.1:5173/
 
 While building the types for dispatch were a little tricky. I came accross an instance where 'isVali' on file `form-hook.ts` was boolean or undefined. SOleved it using one of the options advised in `https://bobbyhadz.com/blog/typescript-type-undefined-is-not-assignable-to-type#:~:text=The%20%22Type%20'undefined'%20is,specific%20type%20before%20the%20assignment.`
 
+## Intersting Challenges to solve on iOS UIKit vs React
+
+- Application wide state
+- Modals
+- Navigation
+- Asynchronous tasks
+- Factory Functions (iOS) / Components (React)
+- Reusable Custom Hooks (React) and Custom Views (iOS UIKit)
+
 ## Sources
 
 - https://www.udemy.com/course/react-nodejs-express-mongodb-the-mern-fullstack-guide/learn/lecture/16845448#overview
