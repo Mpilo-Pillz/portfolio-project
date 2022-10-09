@@ -9,7 +9,7 @@ import {
 
 import "./PlaceForm.css";
 
-export type FormActionType = "INPUT_CHANGE";
+export type FormActionType = "INPUT_CHANGE" | "SET_DATA";
 
 export interface FormState {
   title: {
@@ -23,10 +23,12 @@ export interface FormState {
 }
 
 export interface formActionState {
-  isValid: boolean;
-  inputId: string;
-  type: FormActionType;
-  value: string;
+  isValid?: boolean;
+  inputId?: string | number | symbol | any;
+  type?: FormActionType;
+  value?: string;
+  formIsValid?: boolean | undefined;
+  inputs?: any;
 }
 
 const NewPlace = () => {
