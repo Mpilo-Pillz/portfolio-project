@@ -26,8 +26,22 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
   coordinates,
 }) => {
   const [showMap, setShowMap] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
+
+  const showDeleteWarningHandler = () => {
+    setShowConfirmModal(true);
+  };
+
+  const cancelDeleteHandler = () => {
+    setShowConfirmModal(false);
+  };
+
+  const confirmDeleteHandler = () => {
+    console.log("TODO - Delete");
+    setShowConfirmModal(false);
+  };
 
   return (
     <>
@@ -45,8 +59,27 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
           <Map center={coordinates} zoom={16} />
         </div>
       </Modal>
-      <Card className="place-item__content">
-        <li className="place-item">
+      <Modal
+        show={showConfirmModal}
+        onCancel={() => console.log("TODO - IMPLEMENT")}
+        header="Are you sure"
+        footerClass="place-item__modal-actions"
+        footer={
+          <>
+            <Button inverse onClick={cancelDeleteHandler}>
+              CANCEL
+            </Button>
+            <Button danger onClick={confirmDeleteHandler}>
+              DELETE
+            </Button>
+          </>
+        }
+      >
+        Do you want to proceed and delete this place? Please note that it can't
+        be undone thereafter
+      </Modal>
+      <li className="place-item">
+        <Card className="place-item__content">
           <div className="place-item__image">
             <img src={image} alt={title} />
           </div>
@@ -60,10 +93,12 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
               VIEW ON MAP
             </Button>
             <Button to={`/places/${id}`}>EDIT</Button>
-            <Button danger>DELETE</Button>
+            <Button danger onClick={showDeleteWarningHandler}>
+              DELETE
+            </Button>
           </div>
-        </li>
-      </Card>
+        </Card>
+      </li>
     </>
   );
 };
