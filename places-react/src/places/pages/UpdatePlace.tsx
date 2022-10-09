@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
+import Card from "../../shared/components/UIElements/Card";
 import useForm from "../../shared/hooks/form-hook";
 import { DUMMY_PLACES } from "../../shared/mockData/dummyPlaces";
 import {
@@ -58,7 +59,9 @@ const UpdatePlace = () => {
   if (!identifiedPlace) {
     return (
       <div className="center">
-        <h2>Could not find place!</h2>
+        <Card>
+          <h2>Could not find place!</h2>
+        </Card>
       </div>
     );
   }
