@@ -37,7 +37,7 @@ const formReducer = (state: any, action: formActionState) => {
 };
 
 export const useForm = (
-  initialInputs: { title: UserInput; description: UserInput },
+  initialInputs: any, //{ title: UserInput; description: UserInput },
   initialFormValidity: boolean
 ) => {
   const [formState, dispatch] = useReducer(formReducer, {
