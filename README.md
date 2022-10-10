@@ -28,7 +28,7 @@ While building the types for dispatch were a little tricky. I came accross an in
 ## Intersting Challenges to solve on iOS UIKit vs React
 
 - Application wide state
-- Modals
+- Modals - particularly when confirming delete on iOS
 - Navigation
 - Asynchronous tasks
 - Factory Functions (iOS) / Components (React)
