@@ -9,6 +9,11 @@ const formReducer = (state: any, action: formActionState) => {
       let formIsValid = true; // option 2
       // let formIsValid: boolean | undefined = true; // option 3
       for (const inputId in state.inputs) {
+        if (!state.inputs[inputId]) {
+          // is input fieeld empty, eg is name undefined,
+          // if so continue to go tot he next iteraton and exit the current one
+          continue;
+        }
         if (inputId === action.inputId) {
           formIsValid = formIsValid && (action.isValid as boolean); // option 2
           // formIsValid = formIsValid && action.isValid; // option 3
@@ -35,7 +40,7 @@ const formReducer = (state: any, action: formActionState) => {
       return state;
   }
 };
-
+// TODO learn how to type with Recrod , Recird
 export const useForm = (
   initialInputs: any, //{ title: UserInput; description: UserInput },
   initialFormValidity: boolean
