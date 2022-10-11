@@ -4,6 +4,10 @@ Portfolio project showcasing TypeScript, React, Swift, iOS, Mongo and Express
 
 # Web UI
 
+`![User Places](./images/userPlaces.png =250x250)`
+
+<img src="./images/userPlaces.png" alt="User Places" height="500" width="500"/>
+
 Port http://127.0.0.1:5173/
 
 ## What did I do differently form the course project
@@ -24,6 +28,15 @@ Port http://127.0.0.1:5173/
 ## Challenges faced
 
 While building the types for dispatch were a little tricky. I came accross an instance where 'isVali' on file `form-hook.ts` was boolean or undefined. SOleved it using one of the options advised in `https://bobbyhadz.com/blog/typescript-type-undefined-is-not-assignable-to-type#:~:text=The%20%22Type%20'undefined'%20is,specific%20type%20before%20the%20assignment.`
+
+# REST API
+
+Port http://localhost:4000/
+
+## What did I do differently form the course project
+
+- I am using TypeScript for the Express instead of JavaScript
+- I am using the `import` syntax instead of `require`
 
 ## Intersting Challenges to solve on iOS UIKit vs React
 
