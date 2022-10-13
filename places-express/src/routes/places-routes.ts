@@ -34,6 +34,13 @@ export const DUMMY_PLACES = [
 placesRoutes.get("/:pid", (req, res, next) => {
   const placeId = req.params.pid;
   const place = DUMMY_PLACES.find((p) => p.id === placeId);
+
+  if (!place) {
+    return next({
+      code: 404,
+      message: "Could not find a place for the provided id.",
+    });
+  }
   res.json({ place });
 });
 
@@ -41,6 +48,17 @@ placesRoutes.get("/user/:uid", (req, res, next) => {
   const userId = req.params.uid;
 
   const place = DUMMY_PLACES.find((p) => p.creator === userId);
+
+  if (!place) {
+    return next({
+      code: 404,
+      message: "Could not find a place for the provided user id.",
+    });
+
+    // const error = new Error('Could not find a place for the provided user id.')
+    // error.code = 404
+    // throw error
+  }
 
   res.json({ place });
 });
