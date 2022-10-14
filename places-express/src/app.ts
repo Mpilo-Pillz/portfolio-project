@@ -6,6 +6,8 @@ import { ErrorResponse } from "./models/http-error";
 
 const app = express();
 
+app.use(bodyParser.json());
+
 app.use("/api/places", placesRoutes);
 app.use(
   (error: ErrorResponse, req: Request, res: Response, next: NextFunction) => {
