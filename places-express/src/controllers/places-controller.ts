@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../models/http-error";
+import { Place } from "../types/place";
 
-export const DUMMY_PLACES = [
+export const DUMMY_PLACES: Place[] = [
   {
     id: "p1",
     title: "Mbabane",
@@ -60,4 +61,25 @@ export const getPlaceByUserId = (
   }
 
   res.json({ place });
+};
+
+export const createPlace = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { title, description, coordinates, address, creator }: Place = req.body;
+
+  const createdPlace = {
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+
+  // adding to the front f the array
+  DUMMY_PLACES.unshift(createdPlace); //push(createdPlace)
+
+  res.status(201).json({ place: createdPlace });
 };
