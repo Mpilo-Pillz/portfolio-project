@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import HttpError from "../models/http-error";
 import { Place } from "../types/place";
 
-export const DUMMY_PLACES: Place[] = [
+export let DUMMY_PLACES: Place[] = [
   {
     id: "p1",
     title: "Mbabane",
@@ -63,6 +63,24 @@ export const getPlaceByUserId = (
   res.json({ place });
 };
 
+export const getPlacesByUserId = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.params.uid;
+
+  const places = DUMMY_PLACES.filter((p) => p.creator === userId);
+
+  if (!places || places.length === 0) {
+    return next(
+      new HttpError("Could not find  places for the provided user id.", 404)
+    );
+  }
+
+  res.json({ places });
+};
+
 export const createPlace = (
   req: Request,
   res: Response,
@@ -108,4 +126,9 @@ export const deletePlace = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const placeId = req.params.pid;
+  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+
+  res.status(200).json({ message: "Deleted place" });
+};
