@@ -12,10 +12,16 @@ Port http://127.0.0.1:5173/
 
 ## What did I do differently form the course project
 
+### For the Front End Web Application
+
 - I am using TypeScript for the React Portion instead of JavaScript
 - I used React Rouer v6 instead of v5 as on the course
 - I used Vite React instead of Create-React-App
 - I used React v18 instead of 17
+
+### For the Rest API
+
+- I am using Express JS with TypeScript instead of JavaScript
 
 ## React Practices Displayed
 
@@ -24,6 +30,13 @@ Port http://127.0.0.1:5173/
 - Opted to destructure props
 - Use the empty fragment for a more modernised react
 - for the aside decided to use React Portals to have it rendered as not a child of the root div
+- Use of reusable custome components eg custom Form input components etc
+- Use of reusable custom hooks
+
+## Express Practices
+
+- Error Handling - Throwing an error for Synchrounous functions
+- Error Handling - Using the Next middle ware to catch all errors in asynchronous functions
 
 ## Challenges faced
 
