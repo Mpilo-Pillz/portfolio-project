@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import HttpError from "../models/http-error";
 
 const DUMMY_USERS = [
   {
@@ -14,6 +15,13 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
 };
 export const signup = (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
+
+  const hasUser = DUMMY_USERS.find((u) => u.email === email);
+
+  if (hasUser) {
+    throw new HttpError("user already exists", 422);
+  }
+
   const createdUser = {
     id: "u2",
     name,
@@ -26,5 +34,13 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
   res.status(201).json({ user: createdUser });
 };
 export const login = (req: Request, res: Response, next: NextFunction) => {
-  const {} = req.bod;
+  const { email, password } = req.body;
+
+  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
+
+  if (!identifiedUser || identifiedUser.password !== password) {
+    throw new HttpError("Invalid username oir password", 401);
+  }
+
+  res.json({ message: "Logged in!" });
 };
