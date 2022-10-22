@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
 import { Place } from "../types/place";
 
@@ -86,6 +87,14 @@ export const createPlace = (
   res: Response,
   next: NextFunction
 ) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    res.status(422).json({ message: errors });
+
+    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+  }
   const { title, description, coordinates, address, creator }: Place = req.body;
 
   const createdPlace = {
