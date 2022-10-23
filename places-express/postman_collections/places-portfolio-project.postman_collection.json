@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "f9f6b546-5445-47d8-b711-cf8886b1de57",
+		"name": "places-portfolio-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Places",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Gold reef City\",\n    \"description\": \"Where you go to get a thrill ride\",\n    \"location\": {\n        \"lat\": 26.2360,\n        \"lng\": 28.0132\n    },\n    \"address\": \"Northern Pkwy & Data Cres, Johannesburg, 2159\",\n    \"creator\": \"u2\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/places",
+				"description": "Gets a list of all the places added to the system"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4000/api/users",
+				"description": "Gets all users in the system"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@e.com\",\n    \"password\": \"pass\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/users/login",
+				"description": "Logs user in to crud places"
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Mapee\",\n    \"email\": \"test@e.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/users/signup",
+				"description": "Signs a user up"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Place",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n    \"title\": \"Mbabz\",\n    \"description\": \"One of the places I grew up\",\n    \"address\": \"Dr Sishayi, Mbabane, Eswatini\",\n    \"location\": {\n      \"lat\": -26.3152423,\n      \"lng\": 31.1196755\n    },\n    \"creator\": \"u1\",\n    \"imageUrl\":\n      \"https://images.unsplash.com/photo-1655207882298-bd11bb69ee43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGVzd2F0aW5pfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/places",
+				"description": "Adds a place beloning to a user"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Place",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n    \"title\": \"\",\n    \"description\": \"One of the places I grew\"\n    \n\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/places/u1",
+				"description": "Updates a place added by a user"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
