@@ -21,7 +21,11 @@ placesRoutes.post(
   ],
   createPlace
 );
-placesRoutes.patch("/:pid", updatePlace);
+placesRoutes.patch(
+  "/:pid",
+  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
+  updatePlace
+);
 placesRoutes.delete("/:pid", deletePlace);
 
 export default placesRoutes;
