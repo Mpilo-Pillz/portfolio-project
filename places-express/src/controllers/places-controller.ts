@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import { getCoordsForAddress } from "../../util/location";
 import HttpError from "../models/http-error";
 import { Place } from "../types/place";
 
@@ -82,7 +83,7 @@ export const getPlacesByUserId = (
   res.json({ places });
 };
 
-export const createPlace = (
+export const createPlace = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -93,9 +94,18 @@ export const createPlace = (
     console.log(errors);
     res.status(422).json({ message: errors });
 
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+    next(new HttpError("Invalid inputs passed, please check your data.", 422));
+    // throw new HttpError("Invalid inputs passed, please check your data.", 422);
   }
   const { title, description, coordinates, address, creator }: Place = req.body;
+
+  let coords;
+
+  try {
+    coords = await getCoordsForAddress(address);
+  } catch (error) {
+    return next(error);
+  }
 
   const createdPlace = {
     id: Math.random().toString(),
