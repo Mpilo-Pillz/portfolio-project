@@ -2,9 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { getCoordsForAddress } from "../../util/location";
 import HttpError from "../models/http-error";
-import { Place } from "../types/place";
+import { Place as PlaceType } from "../types/place";
+// import {Place} from "../models/place";
 
-export let DUMMY_PLACES: Place[] = [
+const Place = require("../models/place");
+
+export let DUMMY_PLACES: PlaceType[] = [
   {
     id: "p1",
     title: "Mbabane",
@@ -33,18 +36,39 @@ export let DUMMY_PLACES: Place[] = [
   },
 ];
 
-export const getPlaceById = (
+export const getPlaceById = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const placeId = req.params.pid;
-  const place = DUMMY_PLACES.find((p) => p.id === placeId);
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    console.log(err);
+
+    const error = new HttpError(
+      "Something went wrong, could not find a place",
+      500
+    );
+    return next(error);
+  }
 
   if (!place) {
-    throw new HttpError("Could not find a place for the provided id.", 404);
+    const error = new HttpError(
+      "Could not find a place for the provided id.",
+      404
+    );
+    return next(error);
   }
-  res.json({ place });
+  /**
+   * removing _id and making place an object
+   * mongoose adds and id getter to every document which returns the id as a string
+   * the getters are lost when we add toObject so setting getters to true retains the getters so they are kept and not lost
+   * */
+
+  res.json({ place: place.toObject({ getters: true }) });
 };
 
 export const getPlaceByUserId = (
@@ -97,7 +121,10 @@ export const createPlace = async (
     next(new HttpError("Invalid inputs passed, please check your data.", 422));
     // throw new HttpError("Invalid inputs passed, please check your data.", 422);
   }
-  const { title, description, coordinates, address, creator }: Place = req.body;
+  const { title, description, coordinates, address, creator }: PlaceType =
+    req.body;
+
+  console.log("req.body---------------", req.body);
 
   let coords;
 
@@ -107,19 +134,32 @@ export const createPlace = async (
     return next(error);
   }
 
-  const createdPlace = {
-    id: Math.random().toString(),
+  const createdPlace = new Place({
     title,
     description,
-    location: coordinates,
     address,
+    location: coordinates,
+    image:
+      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
     creator,
-  };
+  });
+  try {
+    console.log("here");
 
-  // adding to the front f the array
-  DUMMY_PLACES.unshift(createdPlace); //push(createdPlace)
+    await createdPlace.save();
+  } catch (err) {
+    console.log(err);
+
+    const error = new HttpError(
+      "Creating place failed, please try again.",
+      500
+    );
+    return next(error);
+  }
 
   res.status(201).json({ place: createdPlace });
+  // adding to the front f the array
+  // DUMMY_PLACES.unshift(createdPlace); //push(createdPlace)
 };
 
 export const updatePlace = (
@@ -136,7 +176,7 @@ export const updatePlace = (
     throw new HttpError("Invalid inputs passed, please check your data.", 422);
   }
 
-  const { title, description }: Place = req.body;
+  const { title, description }: PlaceType = req.body;
   const placeId = req.params.pid;
 
   const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };

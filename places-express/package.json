@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:build": "tsc -w",
-    "start:run": "nodemon dist/src/index.js",
+    "start:run": "nodemon dist/src/app.js",
     "start": "concurrently yarn:start:*"
   },
   "author": "Mpilo-Pillz",
