@@ -71,24 +71,6 @@ export const getPlaceById = async (
   res.json({ place: place.toObject({ getters: true }) });
 };
 
-export const getPlaceByUserId = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.params.uid;
-
-  const place = DUMMY_PLACES.find((p) => p.creator === userId);
-
-  if (!place) {
-    return next(
-      new HttpError("Could not find a place for the provided user id.", 404)
-    );
-  }
-
-  res.json({ place });
-};
-
 export const getPlacesByUserId = async (
   req: Request,
   res: Response,
@@ -110,6 +92,7 @@ export const getPlacesByUserId = async (
     return next(error);
   }
 
+  // if (!places || places.length === 0)
   if (!userWithPlaces || userWithPlaces.places.length === 0) {
     return next(
       new HttpError("Could not find  places for the provided user id.", 404)
@@ -135,7 +118,6 @@ export const createPlace = async (
     res.status(422).json({ message: errors });
 
     next(new HttpError("Invalid inputs passed, please check your data.", 422));
-    // throw new HttpError("Invalid inputs passed, please check your data.", 422);
   }
   const { title, description, coordinates, address, creator }: PlaceType =
     req.body;
@@ -193,8 +175,6 @@ export const createPlace = async (
   }
 
   res.status(201).json({ place: createdPlace });
-  // adding to the front f the array
-  // DUMMY_PLACES.unshift(createdPlace); //push(createdPlace)
 };
 
 export const updatePlace = async (
@@ -226,9 +206,6 @@ export const updatePlace = async (
     );
     return next(error);
   }
-
-  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
-  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
 
   if (place) {
     place.title = title;
