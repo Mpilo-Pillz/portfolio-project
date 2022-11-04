@@ -89,14 +89,24 @@ export const getPlaceByUserId = (
   res.json({ place });
 };
 
-export const getPlacesByUserId = (
+export const getPlacesByUserId = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const userId = req.params.uid;
 
-  const places = DUMMY_PLACES.filter((p) => p.creator === userId);
+  let places: PlaceType[];
+
+  try {
+    places = await Place.find({ creator: userId });
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching places failed, please try again later",
+      500
+    );
+    return next(error);
+  }
 
   if (!places || places.length === 0) {
     return next(
@@ -104,7 +114,9 @@ export const getPlacesByUserId = (
     );
   }
 
-  res.json({ places });
+  res.json({
+    places: places.map((place: any) => place.toObject({ getters: true })),
+  });
 };
 
 export const createPlace = async (
