@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { getCoordsForAddress } from "../../util/location";
 import HttpError from "../models/http-error";
-import { Place as PlaceType } from "../types/place";
-// import {Place} from "../models/place";
-
-const Place = require("../models/place");
+import { PlaceType } from "../types/place";
+import User from "../models/user";
+import mongoose from "mongoose";
+import Place from "../models/place";
 
 export let DUMMY_PLACES: PlaceType[] = [
   {
@@ -136,8 +136,6 @@ export const createPlace = async (
   const { title, description, coordinates, address, creator }: PlaceType =
     req.body;
 
-  console.log("req.body---------------", req.body);
-
   let coords;
 
   try {
@@ -155,8 +153,30 @@ export const createPlace = async (
       "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
     creator,
   });
+
+  let user;
+
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    const error = new HttpError("Creatong place failed", 500);
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not find user for provided id", 404);
+    return next(error);
+  }
+
+  console.log(user);
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdPlace.save({ session: sess });
+    user.places.push(createdPlace as any);
+    await user.save({ session: sess });
+    await sess.commitTransaction();
   } catch (err) {
     console.log(err);
 
@@ -205,11 +225,13 @@ export const updatePlace = async (
   const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
   const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
 
-  place.title = title;
-  place.description = description;
+  if (place) {
+    place.title = title;
+    place.description = description;
+  }
 
   try {
-    await place.save();
+    await place?.save();
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not update place.",
@@ -218,7 +240,7 @@ export const updatePlace = async (
     return next(error);
   }
 
-  res.status(200).json({ place: place.toObject({ getters: true }) });
+  res.status(200).json({ place: place?.toObject({ getters: true }) });
 };
 
 export const deletePlace = async (
@@ -240,7 +262,7 @@ export const deletePlace = async (
   }
 
   try {
-    await place.remove();
+    await place?.remove();
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete place.",

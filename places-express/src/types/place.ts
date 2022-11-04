@@ -3,7 +3,7 @@ export interface Coordinates {
   lng: number;
 }
 
-export interface Place {
+export interface PlaceType {
   title: string;
   description: string;
   coordinates?: Coordinates;
