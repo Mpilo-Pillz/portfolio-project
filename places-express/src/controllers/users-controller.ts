@@ -2,14 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
 import User from "../models/user";
-const DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "Mpi Dlam",
-    email: "test@test.com",
-    password: "mockpassword",
-  },
-];
 
 export const getUsers = async (
   req: Request,
@@ -72,7 +64,7 @@ export const signup = async (
     image:
       "https://images.unsplash.com/photo-1667493572312-19a626f3e088?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
     password,
-    places,
+    places: [],
   });
 
   try {
