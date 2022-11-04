@@ -75,6 +75,7 @@ Port http://localhost:4000/
 - https://bobbyhadz.com/blog/typescript-type-undefined-is-not-assignable-to-type#:~:text=The%20%22Type%20'undefined'%20is,specific%20type%20before%20the%20assignment.
 - https://www.realpythonproject.com/how-to-declare-object-literals-in-typescript-the-right-way/
 - https://react-typescript-cheatsheet.netlify.app/docs/basic/setup
+- [mongoose with typescript] - https://tomanagle.medium.com/strongly-typed-models-with-mongoose-and-typescript-7bc2f7197722
 
 ### Yarn save dev
 
