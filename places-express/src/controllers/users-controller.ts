@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
-
+import User from "../models/user";
 const DUMMY_USERS = [
   {
     id: "u1",
@@ -14,35 +14,64 @@ const DUMMY_USERS = [
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   res.json({ users: DUMMY_USERS });
 };
-export const signup = (req: Request, res: Response, next: NextFunction) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     console.log(errors);
     res.status(422).json({ message: errors });
 
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
   }
 
-  const { name, email, password } = req.body;
+  let existingUser;
+  const { name, email, password, places } = req.body;
 
-  const hasUser = DUMMY_USERS.find((u) => u.email === email);
-
-  if (hasUser) {
-    throw new HttpError("user already exists", 422);
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (err) {
+    const error = new HttpError(
+      "Signing up failed, please try again later",
+      500
+    );
+    return next(error);
   }
 
-  const createdUser = {
-    id: "u2",
+  if (existingUser) {
+    const error = new HttpError(
+      "User exists already, please login instead",
+      422
+    );
+    return next(error);
+  }
+
+  const createdUser = new User({
     name,
     email,
+    image:
+      "https://images.unsplash.com/photo-1667493572312-19a626f3e088?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
     password,
-  };
+    places,
+  });
 
-  DUMMY_USERS.push(createdUser);
+  try {
+    await createdUser.save();
+  } catch (err) {
+    console.log(err);
 
-  res.status(201).json({ user: createdUser });
+    const error = new HttpError("Signing up failed, please try again.", 500);
+    return next(error);
+  }
+
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
+
 export const login = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 

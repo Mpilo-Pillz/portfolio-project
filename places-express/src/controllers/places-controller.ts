@@ -156,8 +156,6 @@ export const createPlace = async (
     creator,
   });
   try {
-    console.log("here");
-
     await createdPlace.save();
   } catch (err) {
     console.log(err);
@@ -185,7 +183,9 @@ export const updatePlace = async (
     console.log(errors);
     res.status(422).json({ message: errors });
 
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
   }
 
   const { title, description }: PlaceType = req.body;
