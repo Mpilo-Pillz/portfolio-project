@@ -174,7 +174,7 @@ export const createPlace = async (
   // DUMMY_PLACES.unshift(createdPlace); //push(createdPlace)
 };
 
-export const updatePlace = (
+export const updatePlace = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -191,15 +191,34 @@ export const updatePlace = (
   const { title, description }: PlaceType = req.body;
   const placeId = req.params.pid;
 
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrongm could not update place.",
+      500
+    );
+    return next(error);
+  }
+
   const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
   const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
 
-  updatedPlace.title = title;
-  updatedPlace.description = description;
+  place.title = title;
+  place.description = description;
 
-  // DUMMY_PLACES[placeIndex] = updatePlace;
+  try {
+    await place.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update place.",
+      500
+    );
+    return next(error);
+  }
 
-  res.status(200).json({ place: updatePlace });
+  res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
 export const deletePlace = (
