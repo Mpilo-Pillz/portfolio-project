@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import { Place } from "./place";
 
+export interface User {
+  name: string;
+  email: string;
+  password: string;
+  image: string;
+  places: Place[];
+}
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -14,4 +22,4 @@ const userSchema = new Schema({
 userSchema.plugin(uniqueValidator);
 
 // module.exports = mongoose.model("User", userSchema);
-export default mongoose.model("User", userSchema);
+export default mongoose.model<User>("User", userSchema);
