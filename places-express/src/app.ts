@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
+import mongoose from "mongoose";
 
 import placesRoutes from "./routes/places-routes";
 import HttpError, { ErrorResponse } from "./models/http-error";
@@ -28,5 +29,7 @@ app.use(
       .json({ message: error.message || "An unknown errror occured!" });
   }
 );
-
-app.listen(4000);
+mongoose
+  .connect("")
+  .then(() => app.listen(4000))
+  .catch((err) => console.log(err));
