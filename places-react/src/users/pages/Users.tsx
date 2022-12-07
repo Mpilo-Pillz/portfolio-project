@@ -1,44 +1,32 @@
 import React, { useEffect, useState } from "react";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import { User } from "../../shared/Types/User";
 import UsersList from "../components/UsersList";
 
 const Users = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedUsers, setLoadedUsers] = useState<User[]>();
 
   useEffect(() => {
     // using an iife becuase cannot make useeffect async
-    const sendRequest = async () => {
-      setIsLoading(true);
-
+    const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/users");
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
+        const responseData = await sendRequest(
+          "http://localhost:4000/api/users"
+        );
 
         setLoadedUsers(responseData.users);
-        setIsLoading(false);
-      } catch (err: any) {
-        setError(err.message);
-      }
-      setIsLoading(false);
+      } catch (err: any) {}
     };
 
-    sendRequest();
-  }, []);
+    fetchUser();
+  }, [sendRequest]);
 
-  const errorHandler = () => {
-    setError(null);
-  };
   return (
     <>
-      <ErrorModal error={error as string} onClear={errorHandler} />
+      <ErrorModal error={error as string} onClear={clearError} />
       {isLoading && (
         <div className="center">
           <LoadingSpinner asOverlay={false} />
