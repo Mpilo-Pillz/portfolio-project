@@ -14,7 +14,7 @@ export const useHttpClient = () => {
     async (
       url: string,
       method: httpRequestMethod = "GET",
-      body = null,
+      body: string | null = null,
       headers = {}
     ) => {
       setIsLoading(true);
@@ -30,15 +30,22 @@ export const useHttpClient = () => {
         });
 
         const responseData: { message: string } = await response.json();
+
+        activeHttpRequests.current = activeHttpRequests.current.filter(
+          (reqCtrl) => reqCtrl !== httpAbortCtrl
+        );
+
         if (!response.ok) {
           throw new Error(responseData.message);
         }
 
+        setIsLoading(false);
         return responseData;
       } catch (err: any) {
         setError(err.message);
+        setIsLoading(false);
+        throw err;
       }
-      setIsLoading(false);
     },
     []
   );
