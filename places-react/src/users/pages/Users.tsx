@@ -1,17 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { User } from "../../shared/Types/User";
 import UsersList from "../components/UsersList";
 
 const Users = () => {
-  const USERS = [
-    {
-      id: "u1",
-      name: "Thulani Gindindza",
-      places: 3,
-      image:
-        "https://images.unsplash.com/photo-1606894436761-7a742916220a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJhZ29uJTIwYmFsbCUyMHN1cGVyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    },
-  ];
-  return <UsersList items={USERS} />;
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>();
+  const [loadedUsers, setLoadedUsers] = useState<User[]>();
+
+  useEffect(() => {
+    // using an iife becuase cannot make useeffect async
+    const sendRequest = async () => {
+      setIsLoading(true);
+
+      try {
+        const response = await fetch("http://localhost:4000/api/users");
+        const responseData = await response.json();
+
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setLoadedUsers(responseData.users);
+        setIsLoading(false);
+      } catch (err: any) {
+        setError(err.message);
+      }
+      setIsLoading(false);
+    };
+
+    sendRequest();
+  }, []);
+
+  const errorHandler = () => {
+    setError(null);
+  };
+  return (
+    <>
+      <ErrorModal error={error as string} onClear={errorHandler} />
+      {isLoading && (
+        <div className="center">
+          <LoadingSpinner asOverlay={false} />
+        </div>
+      )}
+      {!isLoading && loadedUsers && <UsersList items={loadedUsers as User[]} />}
+    </>
+  );
 };
 
 export default Users;
