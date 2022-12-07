@@ -16,7 +16,7 @@ export const useHttpClient = () => {
       method: httpRequestMethod = "GET",
       body: string | null = null,
       headers = {}
-    ) => {
+    ): Promise<any> => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
       activeHttpRequests.current.push(httpAbortCtrl);
@@ -56,7 +56,11 @@ export const useHttpClient = () => {
 
   useEffect(() => {
     return () => {
-      activeHttpRequests.current.forEach((abortCtrl) => abortCtrl.abort());
+      /**
+       * Temporarily removing the cancel due tot he changes of useeffect in react 18
+       * activeHttpRequests.current.forEach((abortCtrl) => abortCtrl.abort());
+       * */
+      console.log("RE Implement activeHttpRequests");
     };
   }, []);
 
