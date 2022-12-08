@@ -4,3 +4,10 @@ export interface User {
   image: string;
   places: [];
 }
+
+export interface UserResponse {
+  user: {
+    id: string;
+  };
+  message: string;
+}

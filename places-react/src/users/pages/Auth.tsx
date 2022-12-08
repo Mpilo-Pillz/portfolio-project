@@ -7,6 +7,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 import useForm from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import { UserResponse } from "../../shared/Types/User";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -64,7 +65,7 @@ const Auth: React.FC = () => {
 
     if (isLoginMode) {
       try {
-        await sendRequest(
+        const responseData: UserResponse = await sendRequest(
           "http://localhost:4000/api/users/login",
           "POST",
           JSON.stringify({
@@ -75,13 +76,13 @@ const Auth: React.FC = () => {
             "Content-Type": "application/json",
           }
         );
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (error) {
         console.log("an unknown error occurred", error);
       }
     } else {
       try {
-        await sendRequest(
+        const responseData: UserResponse = await sendRequest(
           "http://localhost:4000/api/users/signup",
           "POST",
           JSON.stringify({
@@ -93,7 +94,7 @@ const Auth: React.FC = () => {
             "Content-Type": "application/json",
           }
         );
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (err) {
         console.log("an unknown error occurred ", err);
       }
