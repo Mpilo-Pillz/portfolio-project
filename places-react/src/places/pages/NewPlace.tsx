@@ -1,7 +1,9 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useContext, useReducer } from "react";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
+import { AuthContext } from "../../shared/context/auth-context";
 import useForm from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
@@ -32,6 +34,8 @@ export interface formActionState {
 }
 
 const NewPlace = () => {
+  const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -46,9 +50,24 @@ const NewPlace = () => {
     false
   );
 
-  const placeSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const placeSubmitHandler = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
-    console.log(formState.inputs); // TODO: send to backend
+
+    try {
+      await sendRequest(
+        "http://localhost:4000/api/places",
+        "POST",
+        JSON.stringify({
+          title: formState.inputs.title.value,
+          description: formState.inputs.description.value,
+          address: formState.inputs.address.value,
+          creator: auth.userId,
+        })
+      );
+      // Redirect user to different page
+    } catch (error) {}
   };
 
   return (
