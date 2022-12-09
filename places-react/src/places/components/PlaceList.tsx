@@ -19,11 +19,11 @@ const PlaceList: React.FC<{ items: Place[] }> = ({ items }) => {
   }
   return (
     <ul className="place-list">
-      {items.map(({ id, imageUrl, title, creator, address, location }) => (
+      {items.map(({ id, image, title, creator, address, location }) => (
         <PlaceItem
           key={id}
           id={id}
-          image={imageUrl}
+          image={image}
           title={title}
           description={title}
           address={address}
