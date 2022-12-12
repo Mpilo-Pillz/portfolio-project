@@ -119,13 +119,12 @@ export const createPlace = async (
 
     next(new HttpError("Invalid inputs passed, please check your data.", 422));
   }
-  const { title, description, coordinates, address, creator }: PlaceType =
-    req.body;
+  const { title, description, address, creator }: PlaceType = req.body;
 
-  let coords;
+  let coordinates;
 
   try {
-    coords = await getCoordsForAddress(address);
+    coordinates = await getCoordsForAddress(address);
   } catch (error) {
     return next(error);
   }

@@ -4,7 +4,7 @@ import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import Card from "../../shared/components/UIElements/Card";
 import useForm from "../../shared/hooks/form-hook";
-import { DUMMY_PLACES } from "../../shared/mockData/dummyPlaces";
+// import { DUMMY_PLACES } from "../../shared/mockData/dummyPlaces";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
@@ -30,7 +30,9 @@ const UpdatePlace = () => {
     false
   );
 
-  const identifiedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
+  const identifiedPlace = [
+    { id: 1, title: "title", description: "description" },
+  ].find((p: any) => p.id === placeId);
 
   useEffect(() => {
     setFormData(
