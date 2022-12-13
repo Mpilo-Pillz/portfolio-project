@@ -7,6 +7,9 @@ import Map from "../../shared/components/UIElements/Map";
 
 import "./PlaceItem.css";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 interface PlaceItemProps {
   id: string;
@@ -16,6 +19,7 @@ interface PlaceItemProps {
   address: string;
   creatorId: string;
   coordinates: googleMapsLocations;
+  onDelete: (id: string) => void;
 }
 const PlaceItem: React.FC<PlaceItemProps> = ({
   id,
@@ -25,7 +29,9 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
   address,
   creatorId,
   coordinates,
+  onDelete,
 }) => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -40,13 +46,17 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
-    console.log("TODO - Delete");
-    setShowConfirmModal(false);
+  const confirmDeleteHandler = async () => {
+    try {
+      await sendRequest(`http://localhost:4000/api/places/${id}`, "DELETE");
+      onDelete(id);
+      setShowConfirmModal(false);
+    } catch (error) {}
   };
 
   return (
     <>
+      <ErrorModal error={error as string} onClear={clearError} />
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -82,6 +92,7 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
       </Modal>
       <li className="place-item">
         <Card className="place-item__content">
+          {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
             <img src={image} alt={title} />
           </div>
