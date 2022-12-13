@@ -6,7 +6,10 @@ import PlaceItem from "./PlaceItem";
 
 import "./PlaceList.css";
 
-const PlaceList: React.FC<{ items: Place[] }> = ({ items }) => {
+const PlaceList: React.FC<{ items: Place[]; onDeletePlace: () => void }> = ({
+  items,
+  onDeletePlace,
+}) => {
   if (items.length === 0) {
     return (
       <div className="place-list center">
@@ -19,18 +22,21 @@ const PlaceList: React.FC<{ items: Place[] }> = ({ items }) => {
   }
   return (
     <ul className="place-list">
-      {items.map(({ id, imageUrl, title, creator, address, location }) => (
-        <PlaceItem
-          key={id}
-          id={id}
-          image={imageUrl}
-          title={title}
-          description={title}
-          address={address}
-          creatorId={creator}
-          coordinates={location}
-        />
-      ))}
+      {items.map(
+        ({ id, image, title, description, creator, address, location }) => (
+          <PlaceItem
+            key={id}
+            id={id}
+            image={image}
+            title={title}
+            description={description}
+            address={address}
+            creatorId={creator}
+            coordinates={location}
+            onDelete={onDeletePlace}
+          />
+        )
+      )}
     </ul>
   );
 };

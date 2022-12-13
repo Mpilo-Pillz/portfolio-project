@@ -8,7 +8,7 @@ export interface Place {
     lng: number;
   };
   creator: string;
-  imageUrl: string;
+  image: string;
 }
 
 export type googleMapsLocations = {

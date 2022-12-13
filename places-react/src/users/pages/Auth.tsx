@@ -19,7 +19,7 @@ import "./Auth.css";
 const Auth: React.FC = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const signupOrLogin = !isLoginMode ? "LOGIN" : "SIGNUP";
+  const signupOrLogin = isLoginMode ? "LOGIN" : "SIGNUP";
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -134,8 +134,8 @@ const Auth: React.FC = () => {
             id="password"
             type="password"
             label="Password"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter a valid password, atleast 5 characters"
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText="Please enter a valid password, atleast 6 characters"
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
@@ -143,7 +143,7 @@ const Auth: React.FC = () => {
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
-          SWITCH TO {signupOrLogin}
+          SWITCH TO {!signupOrLogin}
         </Button>
       </Card>
     </>
