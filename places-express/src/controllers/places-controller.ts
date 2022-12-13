@@ -253,7 +253,7 @@ export const deletePlace = async (
     await place?.remove({ session: sess });
     await place.creator.places.pull(place);
     await place.creator.save({ session: sess });
-    await sess.commitTransaction;
+    await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete place.",
