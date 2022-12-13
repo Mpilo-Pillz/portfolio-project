@@ -67,7 +67,7 @@ const UpdatePlace = () => {
     console.log(formState.inputs);
   };
 
-  if (!loadedPlace) {
+  if (!loadedPlace && !error) {
     return (
       <div className="center">
         <Card>
