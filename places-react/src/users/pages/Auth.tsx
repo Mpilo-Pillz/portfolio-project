@@ -134,8 +134,8 @@ const Auth: React.FC = () => {
             id="password"
             type="password"
             label="Password"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter a valid password, atleast 5 characters"
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText="Please enter a valid password, atleast 6 characters"
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
