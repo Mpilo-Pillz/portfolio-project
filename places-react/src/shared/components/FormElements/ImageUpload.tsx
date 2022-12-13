@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Button from "./Button";
 
 import "./ImageUpload.css";
@@ -8,6 +8,10 @@ interface ImageUploadProps {
   center: boolean;
 }
 const ImageUpload: React.FC<ImageUploadProps> = ({ id, center }) => {
+  const [file, setFile] = useState<File>();
+  const [previewUrl, setPreviewUrl] = useState();
+  const [isValid, setIsValid] = useState(false);
+
   const filePickerRef = useRef<HTMLInputElement | null>(null);
 
   const pickImageHandler = () => {
@@ -16,8 +20,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ id, center }) => {
     }
     filePickerRef.current.click();
   };
-  const pickedHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
-    console.log(event.target);
+  const pickedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length === 1) {
+      const pickedFile = event.target.files[0];
+      setFile(pickedFile);
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  };
 
   return (
     <div className="form-control">
