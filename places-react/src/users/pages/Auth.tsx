@@ -19,7 +19,7 @@ import "./Auth.css";
 const Auth: React.FC = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const signupOrLogin = !isLoginMode ? "LOGIN" : "SIGNUP";
+  const signupOrLogin = isLoginMode ? "LOGIN" : "SIGNUP";
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -143,7 +143,7 @@ const Auth: React.FC = () => {
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
-          SWITCH TO {signupOrLogin}
+          SWITCH TO {!signupOrLogin}
         </Button>
       </Card>
     </>

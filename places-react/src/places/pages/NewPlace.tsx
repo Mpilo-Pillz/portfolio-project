@@ -95,7 +95,7 @@ const NewPlace = () => {
         />
 
         <Input
-          label="Title"
+          label="Description"
           id="description"
           element="textarea"
           validators={[VALIDATOR_MINLENGTH(5)]}
