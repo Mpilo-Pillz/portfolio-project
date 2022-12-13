@@ -19,18 +19,20 @@ const PlaceList: React.FC<{ items: Place[] }> = ({ items }) => {
   }
   return (
     <ul className="place-list">
-      {items.map(({ id, image, title, creator, address, location }) => (
-        <PlaceItem
-          key={id}
-          id={id}
-          image={image}
-          title={title}
-          description={title}
-          address={address}
-          creatorId={creator}
-          coordinates={location}
-        />
-      ))}
+      {items.map(
+        ({ id, image, title, description, creator, address, location }) => (
+          <PlaceItem
+            key={id}
+            id={id}
+            image={image}
+            title={title}
+            description={description}
+            address={address}
+            creatorId={creator}
+            coordinates={location}
+          />
+        )
+      )}
     </ul>
   );
 };
