@@ -1,6 +1,12 @@
 import multer from "multer";
 import { Express, Request } from "express";
 import { v1 as uuidv1 } from "uuid";
+
+interface FileFilterCallback {
+  (error: Error): void;
+  (error: null, acceptFile: boolean): void;
+}
+
 enum MimetypeEnum {
   PNG = "png",
   JPEG = "jpeg",
@@ -19,9 +25,9 @@ const fileUpload = multer({
     destination: (
       req: Request,
       file,
-      cb: (error: Error | null, destination: string) => void
+      callback: (error: Error | null, destination: string) => void
     ) => {
-      cb(null, "uploads/images");
+      callback(null, "uploads/images");
     },
     filename: (
       req: Request,
@@ -32,7 +38,15 @@ const fileUpload = multer({
       callback(null, `${uuidv1()}.${ext}`);
     },
   }),
-  //   fileFilter:
+  fileFilter: (
+    req: Request,
+    file: Express.Multer.File,
+    callback: any
+  ): void => {
+    const isValid = !!MIME_TYPE_MAP[file.mimetype];
+    let error = isValid ? null : new Error("Invalid mime type!")!;
+    callback(error, isValid);
+  },
 });
 
 export default fileUpload;
