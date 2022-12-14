@@ -14,7 +14,7 @@ export const useHttpClient = () => {
     async (
       url: string,
       method: httpRequestMethod = "GET",
-      body: string | null = null,
+      body: string | FormData | null = null,
       headers = {}
     ): Promise<any> => {
       setIsLoading(true);
