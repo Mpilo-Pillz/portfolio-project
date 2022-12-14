@@ -1,6 +1,7 @@
 import multer from "multer";
 import { Express, Request } from "express";
 import { v1 as uuidv1 } from "uuid";
+import path from "path";
 
 interface FileFilterCallback {
   (error: Error): void;
@@ -27,7 +28,7 @@ const fileUpload = multer({
       file,
       callback: (error: Error | null, destination: string) => void
     ) => {
-      callback(null, "uploads/images");
+      callback(null, path.join(__dirname, "../uploads/images"));
     },
     filename: (
       req: Request,
