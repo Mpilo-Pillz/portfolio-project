@@ -1,3 +1,4 @@
+import fs from "fs";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { getCoordsForAddress } from "../../util/location";
@@ -134,8 +135,7 @@ export const createPlace = async (
     description,
     address,
     location: coordinates,
-    image:
-      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    image: req.file?.path,
     creator,
   });
 
@@ -247,6 +247,8 @@ export const deletePlace = async (
     return next(error);
   }
 
+  const imagePath = place.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -261,6 +263,10 @@ export const deletePlace = async (
     );
     return next(error);
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: "Deleted place" });
 };

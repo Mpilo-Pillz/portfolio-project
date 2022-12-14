@@ -7,6 +7,7 @@ import {
   updatePlace,
 } from "../controllers/places-controller";
 import { check } from "express-validator";
+import fileUpload from "../middleware/file-upload";
 
 const placesRoutes = Router();
 
@@ -14,6 +15,7 @@ placesRoutes.get("/:pid", getPlaceById);
 placesRoutes.get("/user/:uid", getPlacesByUserId);
 placesRoutes.post(
   "/",
+  fileUpload.single("image"),
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
