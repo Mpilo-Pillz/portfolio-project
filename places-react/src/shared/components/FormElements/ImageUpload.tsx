@@ -31,7 +31,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     fileReader.onload = () => {
       setPreviewUrl(fileReader.result);
     };
-    fileReader.readAsDataURL(file); // does not work with callbacks does not return a promise
+    fileReader.readAsDataURL(file); // does not work with callbacks does not give us a promise
   }, [file]);
 
   const pickImageHandler = () => {
