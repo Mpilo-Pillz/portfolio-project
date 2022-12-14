@@ -61,8 +61,7 @@ export const signup = async (
   const createdUser = new User({
     name,
     email,
-    image:
-      "https://images.unsplash.com/photo-1667493572312-19a626f3e088?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    image: req.file?.path,
     password,
     places: [],
   });

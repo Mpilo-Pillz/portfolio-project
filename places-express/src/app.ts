@@ -1,4 +1,7 @@
 import * as dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
@@ -13,6 +16,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -35,6 +40,11 @@ app.use((req, res, next) => {
 
 app.use(
   (error: ErrorResponse, req: Request, res: Response, next: NextFunction) => {
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        console.log(err);
+      });
+    }
     if (res.headersSent) {
       return next(error);
     }
