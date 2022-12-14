@@ -64,8 +64,10 @@ Port http://localhost:4000/
 ## Problems
 
 - having issues with Mongoose types
-- ptojects looks for index js file that is not there
+- projects looks for index js file that is not there
 - use import module with mongoose
+- Faced error `ENOENT: no such file or directory, while folder exist` for file upload. Used `path.join(__dirname, /uploads/images)`
+- Files uploaded saving to dist folder
 
 ## Sources
 
