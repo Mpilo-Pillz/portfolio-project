@@ -8,11 +8,18 @@ import {
 } from "../controllers/places-controller";
 import { check } from "express-validator";
 import fileUpload from "../middleware/file-upload";
+import checkAuth from "../middleware/check-auth";
 
 const placesRoutes = Router();
 
 placesRoutes.get("/:pid", getPlaceById);
 placesRoutes.get("/user/:uid", getPlacesByUserId);
+
+/**
+ * Adding a guard to protect these routes form unauthorized access
+ */
+placesRoutes.use(checkAuth as any);
+
 placesRoutes.post(
   "/",
   fileUpload.single("image"),
