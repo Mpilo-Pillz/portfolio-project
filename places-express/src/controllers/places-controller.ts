@@ -1,11 +1,14 @@
 import fs from "fs";
+
 import { Request, Response, NextFunction } from "express";
+
+import mongoose from "mongoose";
 import { validationResult } from "express-validator";
+
 import { getCoordsForAddress } from "../../util/location";
 import HttpError from "../models/http-error";
 import { PlaceType } from "../types/place";
 import User from "../models/user";
-import mongoose from "mongoose";
 import Place from "../models/place";
 
 export let DUMMY_PLACES: PlaceType[] = [
