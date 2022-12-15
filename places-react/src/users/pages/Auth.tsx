@@ -84,7 +84,7 @@ const Auth: React.FC = () => {
             "Content-Type": "application/json",
           }
         );
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (error) {
         console.log("an unknown error occurred", error);
       }
@@ -101,7 +101,7 @@ const Auth: React.FC = () => {
           "POST",
           formData
         );
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.log("an unknown error occurred ", err);
       }
@@ -158,7 +158,7 @@ const Auth: React.FC = () => {
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
-          SWITCH TO {!signupOrLogin}
+          SWITCH TO {signupOrLogin ? "SIGN UP" : "LOGIN"}
         </Button>
       </Card>
     </>
