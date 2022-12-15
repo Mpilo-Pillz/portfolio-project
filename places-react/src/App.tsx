@@ -9,25 +9,25 @@ import Auth from "./users/pages/Auth";
 import Users from "./users/pages/Users";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   const login = useCallback(
-    (uid: string) => {
-      setIsLoggedIn(true);
+    (uid: string, token?: string) => {
+      setToken(token!);
       setUserId(uid);
     },
-    [setIsLoggedIn]
+    [setToken]
   );
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserId(null);
-  }, [setIsLoggedIn]);
+  }, [setToken]);
 
   let routes;
 
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <>
         <Route path="/" element={<Users />} />
@@ -55,7 +55,9 @@ const App = () => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn: !!token, token, userId, login, logout }}
+    >
       <MainNavigation />
       <main>
         <Routes>{routes}</Routes>

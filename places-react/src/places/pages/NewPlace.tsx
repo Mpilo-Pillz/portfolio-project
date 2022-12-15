@@ -73,7 +73,9 @@ const NewPlace = () => {
       formData.append("creator", auth.userId as string);
       formData.append("image", formState.inputs.image.value);
 
-      await sendRequest("http://localhost:4000/api/places", "POST", formData);
+      await sendRequest("http://localhost:4000/api/places", "POST", formData, {
+        Authorization: `Bearer ${auth.token}`,
+      });
       // Redirect user to different page
       navigate("/");
     } catch (error) {}
