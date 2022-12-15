@@ -1,9 +1,13 @@
+import * as dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 
 import HttpError from "../models/http-error";
 import User from "../models/user";
+
+dotenv.config();
 
 export const getUsers = async (
   req: Request,
@@ -88,7 +92,23 @@ export const signup = async (
     return next(error);
   }
 
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  let token;
+
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      process.env.SECRET_KEY as string,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    console.log(err);
+
+    const error = new HttpError("Signing up failed, please try again.", 500);
+    return next(error);
+  }
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 export const login = async (
@@ -137,8 +157,24 @@ export const login = async (
     );
     return next(error);
   }
+  let token;
+
+  try {
+    token = jwt.sign(
+      { userId: existingUser.id, email: existingUser.email },
+      process.env.SECRET_KEY as string,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    console.log(err);
+
+    const error = new HttpError("Logging in failed, please try again.", 500);
+    return next(error);
+  }
+
   res.json({
-    message: "Logged in!",
-    user: existingUser.toObject({ getters: true }),
+    userId: existingUser.id,
+    user: existingUser.email,
+    token,
   });
 };
