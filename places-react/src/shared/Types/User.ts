@@ -6,8 +6,7 @@ export interface User {
 }
 
 export interface UserResponse {
-  user: {
-    id: string;
-  };
+  userId: string;
+  token: string;
   message: string;
 }

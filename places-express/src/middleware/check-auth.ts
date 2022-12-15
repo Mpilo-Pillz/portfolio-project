@@ -13,8 +13,17 @@ interface CheckAuthRequest extends Request {
 dotenv.config();
 
 export default (req: CheckAuthRequest, res: Response, next: NextFunction) => {
+  /**
+   * Adding the below check for options
+   * for certain HTTP Verbs (NOT GET) the browser automatically sends a options request
+   * before it sends the actual request
+   * */
+  if (req.method === "OPTIONS") {
+    return next();
+  }
   try {
-    const tokenWithoutBearer = req.headers.authorization?.split("")[1];
+    const tokenWithoutBearer = req.headers.authorization?.split(" ")[1];
+
     const token = tokenWithoutBearer;
 
     if (!token) {
