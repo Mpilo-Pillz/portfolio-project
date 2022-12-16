@@ -1,12 +1,16 @@
 import fs from "fs";
+
 import { Request, Response, NextFunction } from "express";
+
+import mongoose from "mongoose";
 import { validationResult } from "express-validator";
+
 import { getCoordsForAddress } from "../../util/location";
 import HttpError from "../models/http-error";
 import { PlaceType } from "../types/place";
 import User from "../models/user";
-import mongoose from "mongoose";
 import Place from "../models/place";
+import { CheckAuthRequest } from "../types/user";
 
 export let DUMMY_PLACES: PlaceType[] = [
   {
@@ -135,7 +139,10 @@ export const createPlace = async (
     description,
     address,
     location: coordinates,
-    image: req.file?.path,
+    image: req.file?.path.replace(
+      "/Users/mpilopillz/Dla-Mini-Dev/myProjects/portfolioProjects/portfolio-project-places/places-express/dist/src/",
+      ""
+    ),
     creator,
   });
 
@@ -177,7 +184,7 @@ export const createPlace = async (
 };
 
 export const updatePlace = async (
-  req: Request,
+  req: CheckAuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -200,12 +207,19 @@ export const updatePlace = async (
     place = await Place.findById(placeId);
   } catch (err) {
     const error = new HttpError(
-      "Something went wrongm could not update place.",
+      "Something went wrong could not update place.",
       500
     );
     return next(error);
   }
 
+  /**
+   * Add to String cos the crator id comes form monguse as a different type
+   */
+  if (place?.creator.toString() !== req.userData.userId) {
+    const error = new HttpError("You are not allowed to edit this place.", 401);
+    return next(error);
+  }
   if (place) {
     place.title = title;
     place.description = description;
@@ -225,7 +239,7 @@ export const updatePlace = async (
 };
 
 export const deletePlace = async (
-  req: Request,
+  req: CheckAuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -244,6 +258,14 @@ export const deletePlace = async (
 
   if (!place) {
     const error = new HttpError("Could not find place for this id.", 404);
+    return next(error);
+  }
+
+  if (place.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this place.",
+      401
+    );
     return next(error);
   }
 

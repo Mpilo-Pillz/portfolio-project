@@ -48,7 +48,14 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
 
   const confirmDeleteHandler = async () => {
     try {
-      await sendRequest(`http://localhost:4000/api/places/${id}`, "DELETE");
+      await sendRequest(
+        `http://localhost:4000/api/places/${id}`,
+        "DELETE",
+        null,
+        {
+          Authorization: `Bearer ${auth.token}`,
+        }
+      );
       onDelete(id);
       setShowConfirmModal(false);
     } catch (error) {}
@@ -94,7 +101,7 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
         <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
-            <img src={`http:/localhost:4000/${image}`} alt={title} />
+            <img src={`http://localhost:4000/${image}`} alt={title} />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>
