@@ -138,7 +138,10 @@ export const createPlace = async (
     description,
     address,
     location: coordinates,
-    image: req.file?.path,
+    image: req.file?.path.replace(
+      "/Users/mpilopillz/Dla-Mini-Dev/myProjects/portfolioProjects/portfolio-project-places/places-express/dist/src/",
+      ""
+    ),
     creator,
   });
 
