@@ -1,10 +1,12 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import NewPlace from "./places/pages/NewPlace";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import UserPlace from "./places/pages/UserPlaces";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
+import { USERDATA } from "./shared/constants";
 import { AuthContext } from "./shared/context/auth-context";
+import { StoredUser } from "./shared/Types/User";
 import Auth from "./users/pages/Auth";
 import Users from "./users/pages/Users";
 
@@ -15,7 +17,7 @@ const App = () => {
   const login = useCallback(
     (uid: string, token?: string) => {
       setToken(token!);
-      localStorage.setItem("userData", JSON.stringify({ userId: uid, token }));
+      localStorage.setItem(USERDATA, JSON.stringify({ userId: uid, token }));
       setUserId(uid);
     },
     [setToken]
@@ -24,7 +26,17 @@ const App = () => {
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    localStorage.removeItem(USERDATA);
   }, [setToken]);
+
+  useEffect(() => {
+    const storedData: StoredUser = JSON.parse(
+      localStorage.getItem(USERDATA) as string
+    );
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]); // will only run once cause login is wrapped in a use callback
 
   let routes;
 

@@ -10,3 +10,8 @@ export interface UserResponse {
   token: string;
   message: string;
 }
+
+export interface StoredUser {
+  userId: string;
+  token: string;
+}
