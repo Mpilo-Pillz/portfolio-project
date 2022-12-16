@@ -10,6 +10,7 @@ import HttpError from "../models/http-error";
 import { PlaceType } from "../types/place";
 import User from "../models/user";
 import Place from "../models/place";
+import { CheckAuthRequest } from "../types/user";
 
 export let DUMMY_PLACES: PlaceType[] = [
   {
@@ -183,7 +184,7 @@ export const createPlace = async (
 };
 
 export const updatePlace = async (
-  req: Request,
+  req: CheckAuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -206,12 +207,16 @@ export const updatePlace = async (
     place = await Place.findById(placeId);
   } catch (err) {
     const error = new HttpError(
-      "Something went wrongm could not update place.",
+      "Something went wrong could not update place.",
       500
     );
     return next(error);
   }
 
+  if (place?.creator !== req.userData.userId) {
+    const error = new HttpError("You are not allowed to edit this place.", 401);
+    return next(error);
+  }
   if (place) {
     place.title = title;
     place.description = description;
