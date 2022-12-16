@@ -10,22 +10,28 @@ import { StoredUser } from "./shared/Types/User";
 import Auth from "./users/pages/Auth";
 import Users from "./users/pages/Users";
 
+let logoutTimer: number;
+
 const App = () => {
   const [token, setToken] = useState<string | null>(null);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState<Date | null>();
   const [userId, setUserId] = useState<string | null>(null);
 
   const login = useCallback(
     (uid: string, token?: string, expirationDate?: Date) => {
       setToken(token!);
       setUserId(uid);
-      const tokenExpirationTime =
+      const dateTokenExpires =
         expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+
+      setTokenExpirationDate(dateTokenExpires);
+
       localStorage.setItem(
         USERDATA,
         JSON.stringify({
           userId: uid,
           token,
-          expiration: tokenExpirationTime.toISOString(),
+          expiration: dateTokenExpires.toISOString(),
         })
       );
     },
@@ -34,16 +40,27 @@ const App = () => {
 
   const logout = useCallback(() => {
     setToken(null);
+    setTokenExpirationDate(null);
     setUserId(null);
     localStorage.removeItem(USERDATA);
   }, [setToken]);
+
+  useEffect(() => {
+    if (token && tokenExpirationDate) {
+      const remainingTime =
+        tokenExpirationDate.getTime() - new Date().getTime(); // in miliseconds
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [token, logout, tokenExpirationDate]); // logout is not recreated thanks to useCallback so no infinte loop
 
   useEffect(() => {
     const storedData: StoredUser = JSON.parse(
       localStorage.getItem(USERDATA) as string
     );
     const isExpirationDateInTheFuture =
-      new Date(storedData.expiration) > new Date();
+      new Date(storedData?.expiration) > new Date();
 
     if (storedData && storedData.token && isExpirationDateInTheFuture) {
       login(
