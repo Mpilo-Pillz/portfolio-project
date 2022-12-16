@@ -3,12 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 import HttpError from "../models/http-error";
-
-interface CheckAuthRequest extends Request {
-  userData: {
-    userId: string;
-  };
-}
+import { CheckAuthRequest } from "../types/user";
 
 dotenv.config();
 
