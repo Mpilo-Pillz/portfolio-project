@@ -14,4 +14,5 @@ export interface UserResponse {
 export interface StoredUser {
   userId: string;
   token: string;
+  expiration: Date;
 }

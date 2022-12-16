@@ -15,10 +15,19 @@ const App = () => {
   const [userId, setUserId] = useState<string | null>(null);
 
   const login = useCallback(
-    (uid: string, token?: string) => {
+    (uid: string, token?: string, expirationDate?: Date) => {
       setToken(token!);
-      localStorage.setItem(USERDATA, JSON.stringify({ userId: uid, token }));
       setUserId(uid);
+      const tokenExpirationTime =
+        expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+      localStorage.setItem(
+        USERDATA,
+        JSON.stringify({
+          userId: uid,
+          token,
+          expiration: tokenExpirationTime.toISOString(),
+        })
+      );
     },
     [setToken]
   );
@@ -33,8 +42,15 @@ const App = () => {
     const storedData: StoredUser = JSON.parse(
       localStorage.getItem(USERDATA) as string
     );
-    if (storedData && storedData.token) {
-      login(storedData.userId, storedData.token);
+    const isExpirationDateInTheFuture =
+      new Date(storedData.expiration) > new Date();
+
+    if (storedData && storedData.token && isExpirationDateInTheFuture) {
+      login(
+        storedData.userId,
+        storedData.token,
+        new Date(storedData.expiration)
+      );
     }
   }, [login]); // will only run once cause login is wrapped in a use callback
 
