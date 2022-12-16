@@ -239,7 +239,7 @@ export const updatePlace = async (
 };
 
 export const deletePlace = async (
-  req: Request,
+  req: CheckAuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -258,6 +258,14 @@ export const deletePlace = async (
 
   if (!place) {
     const error = new HttpError("Could not find place for this id.", 404);
+    return next(error);
+  }
+
+  if (place.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this place.",
+      401
+    );
     return next(error);
   }
 
