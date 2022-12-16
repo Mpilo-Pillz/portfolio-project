@@ -213,7 +213,10 @@ export const updatePlace = async (
     return next(error);
   }
 
-  if (place?.creator !== req.userData.userId) {
+  /**
+   * Add to String cos the crator id comes form monguse as a different type
+   */
+  if (place?.creator.toString() !== req.userData.userId) {
     const error = new HttpError("You are not allowed to edit this place.", 401);
     return next(error);
   }
