@@ -43,6 +43,10 @@ Port http://127.0.0.1:5173/
 While building the types for dispatch were a little tricky. I came accross an instance where 'isVali' on file `form-hook.ts` was boolean or undefined. SOleved it using one of the options advised in `https://bobbyhadz.com/blog/typescript-type-undefined-is-not-assignable-to-type#:~:text=The%20%22Type%20'undefined'%20is,specific%20type%20before%20the%20assignment.`
 With Express and Mongoose, started having log errors on the console about missing semi colons in Mongoose node modules. Reolved teh issue by adding typescript as a project dependency as the project was using typescript installed globally on my dev machine which was version 3
 
+### Code Splitting
+
+For react router 6 code adding `React.lazy()` broke the app. To fix, instead of wrapping the `Suspense` in the `Router`, had to make the router a child of `Suspense`.
+
 # REST API
 
 Port http://localhost:4000/
