@@ -74,7 +74,7 @@ const Auth: React.FC = () => {
     if (isLoginMode) {
       try {
         const responseData: UserResponse = await sendRequest(
-          "http://localhost:4000/api/users/login",
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/login`,
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -97,7 +97,7 @@ const Auth: React.FC = () => {
         formData.append("image", formState.inputs.image.value);
 
         const responseData: UserResponse = await sendRequest(
-          "http://localhost:4000/api/users/signup",
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/signup`,
           "POST",
           formData
         );

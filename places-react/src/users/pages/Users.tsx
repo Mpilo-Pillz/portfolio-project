@@ -14,7 +14,7 @@ const Users = () => {
     const fetchUser = async () => {
       try {
         const responseData = await sendRequest(
-          "http://localhost:4000/api/users"
+          `${import.meta.env.VITE_BACKEND_URL}/api/users`
         );
 
         setLoadedUsers(responseData.users);
