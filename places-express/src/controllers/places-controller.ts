@@ -112,7 +112,7 @@ export const getPlacesByUserId = async (
 };
 
 export const createPlace = async (
-  req: Request,
+  req: CheckAuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -143,15 +143,15 @@ export const createPlace = async (
       "/Users/mpilopillz/Dla-Mini-Dev/myProjects/portfolioProjects/portfolio-project-places/places-express/dist/src/",
       ""
     ),
-    creator,
+    creator: req?.userData?.userId,
   });
 
   let user;
 
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req?.userData?.userId);
   } catch (err) {
-    const error = new HttpError("Creatong place failed", 500);
+    const error = new HttpError("Creating place failed", 500);
     return next(error);
   }
 
@@ -216,7 +216,7 @@ export const updatePlace = async (
   /**
    * Add to String cos the crator id comes form monguse as a different type
    */
-  if (place?.creator.toString() !== req.userData.userId) {
+  if (place?.creator.toString() !== req?.userData?.userId) {
     const error = new HttpError("You are not allowed to edit this place.", 401);
     return next(error);
   }
@@ -261,7 +261,7 @@ export const deletePlace = async (
     return next(error);
   }
 
-  if (place.creator.id !== req.userData.userId) {
+  if (place.creator.id !== req?.userData?.userId) {
     const error = new HttpError(
       "You are not allowed to delete this place.",
       401
